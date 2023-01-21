@@ -2,7 +2,7 @@
 # License GPL-3 <https://www.gnu.org/licenses/gpl-3.0.html>
 from matplotlib.lines import Line2D
 
-from points import MovablePoint
+from points import MassPoint
 import matplotlib.pyplot as plt
 
 
@@ -21,14 +21,14 @@ class Force:
 
 
 class ForcePoint(Force):
-    def __init__(self, p: list[MovablePoint], show=False, *args, **kwargs):
+    def __init__(self, p: list[MassPoint], show=False, *args, **kwargs):
         super().__init__()
         self.show = show
         self.points = p
 
         self.d_arrow: list = []
 
-    def get_force(self, p: MovablePoint):
+    def get_force(self, p: MassPoint):
         return 0
 
     def init_draw(self, drawables: list[Line2D]):

@@ -1,28 +1,29 @@
 # PhysicsSimulator Copyright (C) 2023 Antonin LOUBIERE
 # License GPL-3 <https://www.gnu.org/licenses/gpl-3.0.html>
+
 from itertools import chain
 
-from config import MAX_PAST_POINTS
-from forces.abstract import Force
-from points import MovablePoint, Point
-
-import numpy as np
-import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
+
+from forces.abstract import Force
+from points import Point, UpdatablePoint
 
 
 class Simulation:
+    sim: "Simulation" = None
+
     def __init__(
             self,
             points: list[Point],
-            movable_points: list[MovablePoint],
+            updatable_points: list[UpdatablePoint],
             forces: list[Force],
             interval: int,
             pres: int = 10,
     ) -> None:
+        Simulation.sim = self
         self.drawables: list[Line2D] = []
 
-        self.movable_points = movable_points
+        self.movable_points = updatable_points
         self.points = points
         self.interval = interval
         self.dt = interval / (pres * 1000)

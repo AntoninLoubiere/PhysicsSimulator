@@ -1,11 +1,12 @@
 # PhysicsSimulator Copyright (C) 2023 Antonin LOUBIERE
 # License GPL-3 <https://www.gnu.org/licenses/gpl-3.0.html>
+from math import cos, sin
 from typing import Optional
 
 from matplotlib import pyplot as plt
 from matplotlib.lines import Line2D
 
-from config import MAX_PAST_POINTS, PAST_POINT_FRAME
+from config import INTERVAL, MAX_PAST_POINTS, PAST_POINT_FRAME
 
 
 class Point:
@@ -17,8 +18,8 @@ class Point:
 
         self.d_points: Line2D
         self.d_past_points: Line2D
-        self.past_pos_x = [] if past_pos else None
-        self.past_pos_y = [] if past_pos else None
+        self.past_pos_x = [] if past_pos and self.movable else None
+        self.past_pos_y = [] if past_pos and self.movable else None
 
     def init_draw(self, drawable: list[Line2D], style="o", color: Optional[str] = "black"):
         (self.d_points,) = plt.plot([self.p.real], [self.p.imag], style, color=color, zorder=100)
@@ -29,7 +30,6 @@ class Point:
                                              zorder=5)
             drawable.append(self.d_past_points)
 
-
     def draw(self, frame_id: int):
         self.d_points.set_data([self.p.real], [self.p.imag])
         if self.past_pos_x is not None and frame_id % PAST_POINT_FRAME == 0:
@@ -38,7 +38,7 @@ class Point:
                 self.past_pos_y.append(self.p.imag)
             else:
                 self.past_pos_x[frame_id // PAST_POINT_FRAME % MAX_PAST_POINTS] = self.p.real
-                self.past_pos_y[frame_id// PAST_POINT_FRAME % MAX_PAST_POINTS] = self.p.imag
+                self.past_pos_y[frame_id // PAST_POINT_FRAME % MAX_PAST_POINTS] = self.p.imag
 
             self.d_past_points.set_data(self.past_pos_x, self.past_pos_y)
 
@@ -48,9 +48,33 @@ class Point:
             self.past_pos_y = []
 
 
-class MovablePoint(Point):
+class UpdatablePoint(Point):
     movable = True
 
+    def update(self, _):
+        ...
+
+
+class SinusoidalPoint(UpdatablePoint):
+    movable = True
+
+    def __init__(self, center: complex, amp: complex, pulsation: float, cos_fact: complex = 1, sin_fact: complex = 1j):
+        super().__init__(center)
+        self.center = center
+        self.amp = amp
+        self.pulsation = pulsation
+        self.cos_fact = cos_fact
+        self.sin_fact = sin_fact
+
+    def update(self, _):
+        from simulator import Simulation
+        # print(Simulation.sin.)
+        self.p = self.center + self.amp * (
+                self.sin_fact * sin(self.pulsation * Simulation.sim.frame_id * INTERVAL) +
+                self.cos_fact * cos(self.pulsation * Simulation.sim.frame_id * INTERVAL))
+
+
+class MassPoint(UpdatablePoint):
     def __init__(self, p0: complex, v0: complex, m: float) -> None:
         super().__init__(p0, m)
         self.v = v0

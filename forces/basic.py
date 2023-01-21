@@ -4,7 +4,7 @@ from typing import Union
 
 from config import G, SCALE_K, SCALE_K_SIZE, SCALE_R_ZIG_ZAG
 from .abstract import ForcePoint
-from points import Point, MovablePoint
+from points import Point, MassPoint
 
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
@@ -12,11 +12,11 @@ import numpy as np
 
 
 class Poids(ForcePoint):
-    def __init__(self, p: Union[MovablePoint, list[MovablePoint]], *args, **kwargs):
+    def __init__(self, p: Union[MassPoint, list[MassPoint]], *args, **kwargs):
         self.p = p if isinstance(p, list) else [p]
         super().__init__(self.p, *args, **kwargs)
 
-    def get_force(self, p: MovablePoint):
+    def get_force(self, p: MassPoint):
         return -1j * G * p.m
 
     def update(self):
@@ -29,9 +29,9 @@ class Ressort(ForcePoint):
             self, pta: "Point", ptb: "Point", k: float, l0: float, *args, **kwargs
     ):
         points = []
-        if isinstance(pta, MovablePoint):
+        if isinstance(pta, MassPoint):
             points.append(pta)
-        elif isinstance(ptb, MovablePoint):
+        elif isinstance(ptb, MassPoint):
             points.append(ptb)
 
         super().__init__(points, *args, **kwargs)
@@ -44,7 +44,7 @@ class Ressort(ForcePoint):
 
         self.d_line: Line2D
 
-    def get_force(self, p: MovablePoint):
+    def get_force(self, p: MassPoint):
         l = abs(self.pta.p - self.ptb.p) or 1e-10
         f = self.k * (l - self.l0) * (self.pta.p - self.ptb.p) / l
         if p == self.pta:
@@ -54,9 +54,9 @@ class Ressort(ForcePoint):
     def update(self):
         l = abs(self.pta.p - self.ptb.p) or 1e-10
         f = self.k * (l - self.l0) * (self.pta.p - self.ptb.p) / l
-        if isinstance(self.pta, MovablePoint):
+        if isinstance(self.pta, MassPoint):
             self.pta.ca -= f
-        if isinstance(self.ptb, MovablePoint):
+        if isinstance(self.ptb, MassPoint):
             self.ptb.ca += f
 
     def init_draw(self, drawables: list[Line2D]):
@@ -81,7 +81,7 @@ class Ressort(ForcePoint):
 
 
 class FrottementsFluides(ForcePoint):
-    def __init__(self, p: MovablePoint, k: float, *args, **kwargs):
+    def __init__(self, p: MassPoint, k: float, *args, **kwargs):
         super().__init__([p], *args, **kwargs)
         self.k = k
         self.p = p
