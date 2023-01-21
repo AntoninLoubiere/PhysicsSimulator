@@ -1,3 +1,6 @@
+# PhysicsSimulator Copyright (C) 2023 Antonin LOUBIERE
+# License GPL-3 <https://www.gnu.org/licenses/gpl-3.0.html>
+
 from config import MAX_POINTS
 from forces.abstract import Force
 from points import MovablePoint, Point

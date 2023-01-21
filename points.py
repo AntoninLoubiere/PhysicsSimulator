@@ -1,3 +1,6 @@
+# PhysicsSimulator Copyright (C) 2023 Antonin LOUBIERE
+# License GPL-3 <https://www.gnu.org/licenses/gpl-3.0.html>
+
 class Point:
     def __init__(self, p: complex, m: float = 0) -> None:
         self.p = p

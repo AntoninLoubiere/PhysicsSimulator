@@ -1,3 +1,6 @@
+# PhysicsSimulator Copyright (C) 2023 Antonin LOUBIERE
+# License GPL-3 <https://www.gnu.org/licenses/gpl-3.0.html>
+
 from config import G, SCALE_K, SCALE_K_SIZE, SCALE_R_ZIG_ZAG
 from .abstract import ForcePoint
 from points import Point, MovablePoint
