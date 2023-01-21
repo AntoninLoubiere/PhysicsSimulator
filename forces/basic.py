@@ -59,13 +59,12 @@ class Ressort(ForcePoint):
         if isinstance(self.ptb, MovablePoint):
             self.ptb.ca += f
 
-    def init_draw(self):
+    def init_draw(self, drawables: list[Line2D]):
         (self.d_line,) = plt.plot([], [], "-", zorder=50)
-        l = super().init_draw()
-        l.append(self.d_line)
-        return l
+        super().init_draw(drawables)
+        drawables.append(self.d_line)
 
-    def draw(self):
+    def draw(self, frame_id: int):
         points = []
         t = (self.ptb.p - self.pta.p) / self.d_nb_points
         n = (SCALE_K_SIZE * self.k + SCALE_R_ZIG_ZAG) * t * 1j / abs(t)
@@ -78,10 +77,10 @@ class Ressort(ForcePoint):
 
         self.d_line.set_xdata(np.real(points))
         self.d_line.set_ydata(np.imag(points))
-        super().draw()
+        super().draw(frame_id)
 
 
-class Frottements(ForcePoint):
+class FrottementsFluides(ForcePoint):
     def __init__(self, p: MovablePoint, k: float, *args, **kwargs):
         super().__init__([p], *args, **kwargs)
         self.k = k

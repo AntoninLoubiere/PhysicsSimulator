@@ -10,7 +10,6 @@ M = 0.100  # kg
 K = 0.1  #
 G = 9.81  # m.s⁻²
 
-MAX_POINTS = 10
 
 TMPS_REEL = 20  # s
 VITESSE_ANIM = 100  # %
@@ -25,3 +24,6 @@ SCALE_VEC = 0.01
 # Constantes
 INTERVAL = 1000 // FPS
 NB = 100 * TMPS_REEL * FPS // VITESSE_ANIM
+
+PAST_POINT_FRAME = 2
+MAX_PAST_POINTS = FPS // PAST_POINT_FRAME

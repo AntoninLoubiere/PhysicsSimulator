@@ -1,5 +1,6 @@
 # PhysicsSimulator Copyright (C) 2023 Antonin LOUBIERE
 # License GPL-3 <https://www.gnu.org/licenses/gpl-3.0.html>
+from matplotlib.lines import Line2D
 
 from points import MovablePoint
 import matplotlib.pyplot as plt
@@ -12,11 +13,11 @@ class Force:
     def update(self):
         raise NotImplemented
 
-    def draw(self):
+    def draw(self, frame_id: int) -> None:
         pass
 
-    def init_draw(self):
-        return []
+    def init_draw(self, drawables) -> None:
+        return
 
 
 class ForcePoint(Force):
@@ -30,8 +31,8 @@ class ForcePoint(Force):
     def get_force(self, p: MovablePoint):
         return 0
 
-    def init_draw(self):
-        lst = super().init_draw()
+    def init_draw(self, drawables: list[Line2D]):
+        super().init_draw(drawables)
         if self.show:
             self.d_arrow = [
                 plt.arrow(
@@ -46,12 +47,10 @@ class ForcePoint(Force):
                 )
                 for p in self.points
             ]
-            lst.extend(self.d_arrow)
-            print(self.d_arrow)
-        return lst
+            drawables.extend(self.d_arrow)
 
-    def draw(self):
+    def draw(self, frame_id: int):
         for a, p in zip(self.d_arrow, self.points):
             f = self.get_force(p)
             a.set_data(x=p.p.real, y=p.p.imag, dx=f.real, dy=f.imag)
-        return super().draw()
+        return super().draw(frame_id)
