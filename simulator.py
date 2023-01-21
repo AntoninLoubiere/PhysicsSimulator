@@ -9,15 +9,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
+
 class Simulation:
     def __init__(
-        self,
-        points: list[Point],
-        movable_points: list[MovablePoint],
-        forces: list[Force],
-        interval: int,
-        pres: int = 10,
-        chronographie: int = 5,
+            self,
+            points: list[Point],
+            movable_points: list[MovablePoint],
+            forces: list[Force],
+            interval: int,
+            pres: int = 10,
+            chronographie: int = 5,
     ) -> None:
         self.drawables: list[Line2D] = []
         self.d_points: Line2D
@@ -86,10 +87,10 @@ class Simulation:
                 else:
                     self.chrono_p_x[
                         (nb_frame % MAX_POINTS) * nb_mov_points + i
-                    ] = p.p.real
+                        ] = p.p.real
                     self.chrono_p_y[
                         (nb_frame % MAX_POINTS) * nb_mov_points + i
-                    ] = p.p.imag
+                        ] = p.p.imag
                 self.d_points_chrono.set_data(self.chrono_p_x, self.chrono_p_y)
         self.frame_id += 1
 

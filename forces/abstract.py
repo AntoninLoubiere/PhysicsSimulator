@@ -4,6 +4,7 @@
 from points import MovablePoint
 import matplotlib.pyplot as plt
 
+
 class Force:
     def __init__(self):
         pass
@@ -20,7 +21,7 @@ class Force:
 
 class ForcePoint(Force):
     def __init__(self, p: list[MovablePoint], show=False, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__()
         self.show = show
         self.points = p
 

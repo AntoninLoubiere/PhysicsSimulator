@@ -14,13 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
-from config import TMPS_REEL, NB, INTERVAL
-from system import sys
 
-time = np.linspace(0, TMPS_REEL, NB)
+from config import INTERVAL, NB
+from system import sys
 
 fig, ax = plt.subplots()
 
@@ -43,7 +41,7 @@ def update(_):
 
 
 ani = FuncAnimation(
-    fig, update, frames=time, init_func=init, blit=True, interval=INTERVAL
+    fig, update, frames=NB, init_func=init, blit=True, interval=INTERVAL
 )
 plt.show()
 # ani.save("anim.gif", fps=FPS)

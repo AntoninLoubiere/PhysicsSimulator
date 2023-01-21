@@ -1,5 +1,6 @@
 # PhysicsSimulator Copyright (C) 2023 Antonin LOUBIERE
 # License GPL-3 <https://www.gnu.org/licenses/gpl-3.0.html>
+from typing import Union
 
 from config import G, SCALE_K, SCALE_K_SIZE, SCALE_R_ZIG_ZAG
 from .abstract import ForcePoint
@@ -11,7 +12,7 @@ import numpy as np
 
 
 class Poids(ForcePoint):
-    def __init__(self, p: MovablePoint | list[MovablePoint], *args, **kwargs):
+    def __init__(self, p: Union[MovablePoint, list[MovablePoint]], *args, **kwargs):
         self.p = p if isinstance(p, list) else [p]
         super().__init__(self.p, *args, **kwargs)
 
@@ -25,7 +26,7 @@ class Poids(ForcePoint):
 
 class Ressort(ForcePoint):
     def __init__(
-        self, pta: "Point", ptb: "Point", k: float, l0: float, *args, **kwargs
+            self, pta: "Point", ptb: "Point", k: float, l0: float, *args, **kwargs
     ):
         points = []
         if isinstance(pta, MovablePoint):
