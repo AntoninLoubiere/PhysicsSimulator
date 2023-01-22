@@ -30,12 +30,11 @@ sys = Simulation(
     points=[A, M1, M2],
     forces=[
         Poids([M1, M2]),
-        FrottementsFluides(M1, 0.1),
-        FrottementsFluides(M2, 0.1),
-        Ressort(A, M1, 5, 1),
-        Ressort(M1, M2, 5, 1),
-    ],
-    INTERVAL,
+        CircleRestriction(M1, [M2], 4),
+        CircleRestriction(A, [M1], 4),
+        FrottementsFluides(M1, 0.025),
+        FrottementsFluides(M2, 0.025)
+    ]
 )
 
 # A = SinusoidalPoint(0, 4, 10, 1, 1j)

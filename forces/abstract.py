@@ -57,3 +57,20 @@ class ForcePoint(Force):
             f = self.get_force(p)
             a.set_data(x=p.p.real, y=p.p.imag, dx=f.real, dy=f.imag)
         return super().draw(frame_id)
+
+
+class CurveRestriction(ForcePoint):
+    post_update = True
+
+    def __init__(self, p: list[MassPoint], *args, **kwargs):
+        super().__init__(p, *args, **kwargs)
+
+    def apply_reaction(self, p: MassPoint, n: complex, curvature: int):
+        if n == 0 or curvature == 0 or p.v == 0:
+            return 0
+        v = abs(p.v)
+        unit_vec_normal = n / abs(n)
+        reac = v * v / curvature * unit_vec_normal + (
+                    p.ca.real * v.real + p.ca.imag * v.imag) / v * unit_vec_normal * 1j
+        p.ca += reac
+        return reac
