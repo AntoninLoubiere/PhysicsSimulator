@@ -3,7 +3,7 @@
 
 from itertools import chain
 
-from matplotlib.lines import Line2D
+from matplotlib.artist import Artist
 
 from forces.abstract import Force
 from points import Point, UpdatablePoint
@@ -21,7 +21,7 @@ class Simulation:
             pres: int = 10,
     ) -> None:
         Simulation.sim = self
-        self.drawables: list[Line2D] = []
+        self.drawables: list[Artist] = []
 
         self.movable_points = updatable_points
         self.points = points

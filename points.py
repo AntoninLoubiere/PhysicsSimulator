@@ -4,24 +4,26 @@ from math import cos, sin
 from typing import Optional
 
 from matplotlib import pyplot as plt
+from matplotlib.artist import Artist
 from matplotlib.lines import Line2D
+from matplotlib.patches import FancyArrow
 
-from config import INTERVAL_S, MAX_PAST_POINTS, PAST_POINT_FRAME
+from config import INTERVAL_S, MAX_PAST_POINTS, PAST_POINT_FRAME, SCALE_VEC_A, SCALE_VEC_V
 
 
 class Point:
     movable = False
+    d_points: Line2D
+    d_past_points: Line2D
 
     def __init__(self, p: complex, m: float = 0, past_pos=True) -> None:
         self.p = p
         self.m = m
 
-        self.d_points: Line2D
-        self.d_past_points: Line2D
         self.past_pos_x = [] if past_pos and self.movable else None
         self.past_pos_y = [] if past_pos and self.movable else None
 
-    def init_draw(self, drawable: list[Line2D], style="o", color: Optional[str] = "black"):
+    def init_draw(self, drawable: list[Artist], style="o", color: Optional[str] = "black"):
         (self.d_points,) = plt.plot([self.p.real], [self.p.imag], style, color=color, zorder=100)
         if self.movable:
             drawable.append(self.d_points)
@@ -75,21 +77,47 @@ class SinusoidalPoint(UpdatablePoint):
 
 
 class MassPoint(UpdatablePoint):
-    def __init__(self, p0: complex, v0: complex, m: float) -> None:
+    d_v_arrow: FancyArrow
+    d_a_arrow: FancyArrow
+
+    def __init__(self, p0: complex, v0: complex, m: float, show_v_vect=False, show_a_vect=False) -> None:
         super().__init__(p0, m)
         self.v = v0
 
+        self.a: complex = 0
         self.ca: complex = 0
 
         self.init_p = p0
         self.init_v = v0
+        self.show_v_vect = show_v_vect
+        self.show_a_vect = show_a_vect
 
-    def init_draw(self, *args, **kwargs):
-        super().init_draw(*args, **kwargs, color=None)
+    def init_draw(self, drawable, *args, **kwargs):
+        super().init_draw(drawable, *args, **kwargs, color=None)
+        if self.show_v_vect:
+            v = self.v * SCALE_VEC_V
+            self.d_v_arrow = plt.arrow(x=self.p.real, y=self.p.imag, dx=v.real, dy=v.imag, color="#fbbf24")
+            drawable.append(self.d_v_arrow)
+
+        if self.show_a_vect:
+            a = self.a * SCALE_VEC_A
+            self.d_a_arrow = plt.arrow(x=self.p.real, y=self.p.imag, dx=a.real, dy=a.imag, color="#34d399")
+            drawable.append(self.d_a_arrow)
+
+    def draw(self, frame_id: int):
+        if self.show_v_vect:
+            v = self.v * SCALE_VEC_V
+            self.d_v_arrow.set_data(x=self.p.real, y=self.p.imag, dx=v.real, dy=v.imag)
+
+        if self.show_a_vect:
+            a = self.a * SCALE_VEC_A
+            self.d_a_arrow.set_data(x=self.p.real, y=self.p.imag, dx=a.real, dy=a.imag)
+        super().draw(frame_id)
 
     def update(self, dt):
         self.p += self.v * dt
         self.v += self.ca * dt / self.m
+        self.a = self.ca
         self.ca = 0
 
     def reset(self):
@@ -97,5 +125,6 @@ class MassPoint(UpdatablePoint):
         self.v = self.init_v
         super().reset()
 
-    def __repr__(self) -> str:
-        return f"AP (p={self.p}, v={self.v}, m={self.m})"
+
+def __repr__(self) -> str:
+    return f"AP (p={self.p}, v={self.v}, m={self.m})"

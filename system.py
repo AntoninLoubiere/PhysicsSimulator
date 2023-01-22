@@ -11,11 +11,16 @@ M1 = MassPoint(
     -2j,
     0,
     0.1,
+    show_v_vect=True,
+    show_a_vect=True
 )
 M2 = MassPoint(
     -3j + 0,
     0,
     0.1,
+    show_v_vect=True,
+    show_a_vect=True
+
 )
 
 sys = Simulation(
