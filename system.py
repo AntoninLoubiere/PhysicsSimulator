@@ -6,23 +6,50 @@ from forces import FrottementsFluides, Poids, Ressort
 from points import MassPoint, SinusoidalPoint
 from simulator import Simulation
 
-A = SinusoidalPoint(0, 1j + 1, 0.007, 1, 2j)
+A = SinusoidalPoint(0, 4, 2, 1, 1j)
 M1 = MassPoint(
-    2j,
+    -2j,
+    0,
+    0.1,
+)
+M2 = MassPoint(
+    -3j + 0,
     0,
     0.1,
 )
 
 sys = Simulation(
     [],
-    [A, M1],
+    [A, M1, M2],
     [
-        Poids([M1]),
+        Poids([M1, M2]),
         FrottementsFluides(M1, 0.1),
-        Ressort(A, M1, 5, 2),
+        FrottementsFluides(M2, 0.1),
+        Ressort(A, M1, 5, 1),
+        Ressort(M1, M2, 5, 1),
     ],
     INTERVAL,
 )
+
+# A = SinusoidalPoint(-2, 1, 0.007, 1, 1j)
+# B = SinusoidalPoint(2, 1j, 0.0075, 1, 1j)
+# M1 = MassPoint(
+#     2j,
+#     0,
+#     0.1,
+# )
+#
+# sys = Simulation(
+#     [],
+#     [A, B, M1],
+#     [
+#         Poids([M1]),
+#         FrottementsFluides(M1, 0.1),
+#         Ressort(A, M1, 5, 2),
+#         Ressort(B, M1, 5, 2),
+#     ],
+#     INTERVAL,
+# )
 
 # A = Point(4j)
 # M1 = MassPoint(

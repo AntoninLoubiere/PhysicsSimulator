@@ -66,7 +66,7 @@ class Ressort(ForcePoint):
 
     def draw(self, frame_id: int):
         points = []
-        t = (self.ptb.p - self.pta.p) / self.d_nb_points
+        t = (self.ptb.p - self.pta.p) / self.d_nb_points or 1e-10
         n = (SCALE_K_SIZE * self.k + SCALE_R_ZIG_ZAG) * t * 1j / abs(t)
 
         points.append(self.pta.p)

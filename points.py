@@ -6,7 +6,7 @@ from typing import Optional
 from matplotlib import pyplot as plt
 from matplotlib.lines import Line2D
 
-from config import INTERVAL, MAX_PAST_POINTS, PAST_POINT_FRAME
+from config import INTERVAL_S, MAX_PAST_POINTS, PAST_POINT_FRAME
 
 
 class Point:
@@ -70,8 +70,8 @@ class SinusoidalPoint(UpdatablePoint):
         from simulator import Simulation
         # print(Simulation.sin.)
         self.p = self.center + self.amp * (
-                self.sin_fact * sin(self.pulsation * Simulation.sim.frame_id * INTERVAL) +
-                self.cos_fact * cos(self.pulsation * Simulation.sim.frame_id * INTERVAL))
+                self.sin_fact * sin(self.pulsation * Simulation.sim.frame_id * INTERVAL_S) +
+                self.cos_fact * cos(self.pulsation * Simulation.sim.frame_id * INTERVAL_S))
 
 
 class MassPoint(UpdatablePoint):

@@ -22,7 +22,6 @@ from system import sys
 
 fig, ax = plt.subplots()
 
-
 sys.init_draw()
 
 
@@ -44,5 +43,4 @@ ani = FuncAnimation(
     fig, update, frames=NB, init_func=init, blit=True, interval=INTERVAL
 )
 plt.show()
-# ani.save("anim.gif", fps=FPS)
 # ani.to_html5_video()
