@@ -8,11 +8,12 @@ from matplotlib.artist import Artist
 from matplotlib.lines import Line2D
 from matplotlib.patches import FancyArrow
 
-from config import INTERVAL_S, MAX_PAST_POINTS, PAST_POINT_FRAME, SCALE_VEC_A, SCALE_VEC_V
+from config import ARROW_SIZE, INTERVAL_S, MAX_PAST_POINTS, PAST_POINT_FRAME, SCALE_VEC_A, SCALE_VEC_V
 
 
 class Point:
     movable = False
+    selectable = True
     d_points: Line2D
     d_past_points: Line2D
 
@@ -25,8 +26,7 @@ class Point:
 
     def init_draw(self, drawable: list[Artist], style="o", color: Optional[str] = "black"):
         (self.d_points,) = plt.plot([self.p.real], [self.p.imag], style, color=color, zorder=100)
-        if self.movable:
-            drawable.append(self.d_points)
+        drawable.append(self.d_points)
         if self.movable and self.past_pos_x is not None:
             (self.d_past_points,) = plt.plot(self.past_pos_x, self.past_pos_y, '+', color=self.d_points.get_color(),
                                              zorder=5)
@@ -34,6 +34,7 @@ class Point:
 
     def draw(self, frame_id: int):
         self.d_points.set_data([self.p.real], [self.p.imag])
+
         if self.past_pos_x is not None and frame_id % PAST_POINT_FRAME == 0:
             if len(self.past_pos_x) < MAX_PAST_POINTS:
                 self.past_pos_x.append(self.p.real)
@@ -48,6 +49,9 @@ class Point:
         if self.past_pos_x is not None:
             self.past_pos_x = []
             self.past_pos_y = []
+
+    def on_select_move(self, c: complex):
+        self.p = c
 
 
 class UpdatablePoint(Point):
@@ -75,6 +79,9 @@ class SinusoidalPoint(UpdatablePoint):
                 self.sin_fact * sin(self.pulsation * Simulation.sim.frame_id * INTERVAL_S) +
                 self.cos_fact * cos(self.pulsation * Simulation.sim.frame_id * INTERVAL_S))
 
+    def on_select_move(self, c: complex):
+        self.center = c
+
 
 class MassPoint(UpdatablePoint):
     d_v_arrow: FancyArrow
@@ -96,12 +103,14 @@ class MassPoint(UpdatablePoint):
         super().init_draw(drawable, *args, **kwargs, color=None)
         if self.show_v_vect:
             v = self.v * SCALE_VEC_V
-            self.d_v_arrow = plt.arrow(x=self.p.real, y=self.p.imag, dx=v.real, dy=v.imag, color="#fbbf24")
+            self.d_v_arrow = plt.arrow(x=self.p.real, y=self.p.imag, dx=v.real, dy=v.imag, color="#fbbf24",
+                                       head_width=ARROW_SIZE, head_length=ARROW_SIZE)
             drawable.append(self.d_v_arrow)
 
         if self.show_a_vect:
             a = self.a * SCALE_VEC_A
-            self.d_a_arrow = plt.arrow(x=self.p.real, y=self.p.imag, dx=a.real, dy=a.imag, color="#34d399")
+            self.d_a_arrow = plt.arrow(x=self.p.real, y=self.p.imag, dx=a.real, dy=a.imag, color="#f43f5e",
+                                       head_width=ARROW_SIZE, head_length=ARROW_SIZE)
             drawable.append(self.d_a_arrow)
 
     def draw(self, frame_id: int):

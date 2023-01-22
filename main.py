@@ -17,7 +17,7 @@
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-from config import INTERVAL, NB
+from config import INTERVAL
 from system import sys
 
 fig, ax = plt.subplots()
@@ -40,7 +40,7 @@ def update(_):
 
 
 ani = FuncAnimation(
-    fig, update, frames=NB, init_func=init, blit=True, interval=INTERVAL
+    fig, update, init_func=init, blit=True, interval=INTERVAL
 )
+
 plt.show()
-# ani.to_html5_video()

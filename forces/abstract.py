@@ -1,12 +1,15 @@
 # PhysicsSimulator Copyright (C) 2023 Antonin LOUBIERE
 # License GPL-3 <https://www.gnu.org/licenses/gpl-3.0.html>
+
+import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
 from points import MassPoint
-import matplotlib.pyplot as plt
 
 
 class Force:
+    post_update = False
+
     def __init__(self):
         pass
 
